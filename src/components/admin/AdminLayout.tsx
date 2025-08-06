@@ -73,16 +73,16 @@ export const AdminLayout: React.FC = () => {
             </div>
 
             {/* Navigation */}
-            <Nav 
-              devId="admin-nav" 
-              devName="Admin Navigation" 
+            <Nav
+              devId="admin-nav"
+              devName="Admin Navigation"
               devDescription="Admin sidebar navigation"
               className="flex-1 space-y-1 px-3 py-4"
             >
               {navItems.map((item) => {
                 const isActive = location.pathname === item.href;
                 const Icon = item.icon;
-                
+
                 return (
                   <Link
                     key={item.href}
@@ -109,9 +109,7 @@ export const AdminLayout: React.FC = () => {
                     {user?.name?.[0]?.toUpperCase() || 'A'}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {user?.name || 'Admin'}
-                    </p>
+                    <p className="text-sm font-medium text-gray-900">{user?.name || 'Admin'}</p>
                     <p className="text-xs text-gray-500">Administrator</p>
                   </div>
                 </div>
