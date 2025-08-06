@@ -1,12 +1,11 @@
 import React from 'react';
-import { Container, Div, Card, CardHeader, CardTitle, CardContent, Icon } from '@/lib/dev-container';
+import { Container, Div, Card, CardHeader, CardTitle, CardContent } from '@/lib/dev-container';
 import {
   LayoutDashboard,
   ChartBar,
   Users,
   ShieldCheck,
 } from 'lucide-react';
-
 const features = [
   {
     name: 'Intuitive Dashboard',
@@ -29,7 +28,6 @@ const features = [
     icon: ShieldCheck,
   },
 ];
-
 export default function Features() {
   return (
     <Container componentId="landing-features">
@@ -38,7 +36,11 @@ export default function Features() {
           {features.map((feature) => {
             const IconComponent = feature.icon;
             return (
-              <Card key={feature.name} devId={\`feature-card-\${feature.name.replace(/\\s+/g, '-').toLowerCase()}\`} className="flex flex-col p-6">
+              <Card
+                key={feature.name}
+                devId={`feature-card-${feature.name.replace(/\s+/g, '-').toLowerCase()}`}
+                className="flex flex-col p-6"
+              >
                 <Div className="flex items-center mb-4">
                   <IconComponent className="h-6 w-6 text-purple-600" />
                 </Div>
