@@ -17,21 +17,18 @@ export const handler: Handler = async (event, _context) => {
     };
   }
 
-  const mongoUri =
-    process.env.MONGODB_URI ||
-    process.env.DATABASE_URL ||
-    'mongodb://localhost:27017/geenius-template';
+  const mongoUri = process.env.MONGODB_URI || process.env.DATABASE_URL || 'mongodb://localhost:27017/geenius-template';
   const client = new MongoClient(mongoUri);
 
   try {
     await client.connect();
     const db = client.db();
 
-    // Compute stats
-    const totalUsers = await db.collection('UserPreference').estimatedDocumentCount();
-    const activeSessions = await db
-      .collection('session')
-      .countDocuments({ expiresAt: { $gt: new Date() } });
+    // Simple aggregation for demonstration
+    const totalUsers = await db.collection('user').estimatedDocumentCount();
+    const activeSessions = await db.collection('session').countDocuments({
+      expiresAt: { $gt: new Date() },
+    });
     const recentActivities = await db
       .collection('AuditLog')
       .find({})
@@ -42,10 +39,9 @@ export const handler: Handler = async (event, _context) => {
     const stats = {
       totalUsers,
       activeSessions,
-      recentActivities: recentActivities.map((a) => ({
+      recentActivities: recentActivities.map((a: any) => ({
         id: a._id.toString(),
-        action: a.action,
-        timestamp: a.createdAt,
+        description: a.action,
       })),
     };
 
@@ -59,7 +55,7 @@ export const handler: Handler = async (event, _context) => {
       body: JSON.stringify(stats),
     };
   } catch (error: any) {
-    console.error('Admin stats error:', error);
+    console.error('Admin stats API error:', error);
     return {
       statusCode: 500,
       headers: {
@@ -73,5 +69,3 @@ export const handler: Handler = async (event, _context) => {
     await client.close();
   }
 };
-
-export default handler;
