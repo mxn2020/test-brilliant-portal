@@ -1,18 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAdminStats } from '@/lib/api/admin';
 
-interface AdminStats {
+export interface AdminStatsData {
   totalUsers: number;
   activeSessions: number;
-  recentActivities: { id: string; action: string; timestamp: string }[];
+  recentActivities: { id: string; description: string }[];
 }
 
-export const useAdminData = () => {
-  return useQuery<AdminStats, Error>('adminStats', async () => {
-    const response = await fetchAdminStats();
+export function useAdminData() {
+  return useQuery<AdminStatsData, Error>(['adminStats'], async () => {
+    const response = await fetch('/api/admin/stats', {
+      credentials: 'include',
+    });
+
     if (!response.ok) {
-      throw new Error('Failed to fetch admin stats');
+      throw new Error('Failed to fetch admin statistics');
     }
-    return response.json();
+
+    const data = await response.json();
+    return data as AdminStatsData;
   });
-};
+}
